@@ -37,7 +37,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install -y cargo-deb
+          cargo install cargo-deb
           cargo deb --no-build --no-strip
           mv target/debian/filetype-cli_${{ env.VERSION }}_amd64.deb filetype-cli-${{ env.VERSION }}-amd64.deb
 
@@ -51,7 +51,6 @@ jobs:
       - name: Build macOS pkg
         if: matrix.os == 'macos-latest'
         run: |
-          brew install pkgbuild
           cargo build --release
           pkgbuild --identifier com.example.filetype-cli --version ${{ env.VERSION }} --root target/release filetype-cli-${{ env.VERSION }}.pkg
 

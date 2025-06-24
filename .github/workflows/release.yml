@@ -50,7 +50,14 @@ jobs:
           wget -O linuxdeploy https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
           wget -O linuxdeploy-plugin-appimage https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
           chmod +x linuxdeploy linuxdeploy-plugin-appimage
-          ./linuxdeploy --appdir AppDir --executable target/release/filetype-cli --desktop-file <(echo "[Desktop Entry]\nType=Application\nName=filetype-cli\nExec=filetype-cli\nIcon=app") --output appimage
+          mkdir -p AppDir
+          echo "[Desktop Entry]
+Type=Application
+Name=filetype-cli
+Exec=filetype-cli
+Icon=app
+Terminal=true" > filetype-cli.desktop
+          ./linuxdeploy --appdir AppDir --executable target/release/filetype-cli --desktop-file filetype-cli.desktop --output appimage
           mv filetype-cli*.AppImage filetype-cli-${{ env.VERSION }}.AppImage
 
       - name: Build macOS pkg

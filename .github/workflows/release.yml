@@ -1,0 +1,86 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Extract version
+        id: version
+        run: |
+          echo "VERSION=$(grep '^version' Cargo.toml | head -1 | sed 's/version = \"\(.*\)\"/\1/')" >> $GITHUB_ENV
+
+      - name: Build Windows exe
+        if: matrix.os == 'windows-latest'
+        run: cargo build --release
+      - name: Rename exe
+        if: matrix.os == 'windows-latest'
+        run: |
+          mv target/release/filetype-cli.exe filetype-cli-${{ env.VERSION }}-windows.exe
+
+      - name: Build .deb
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cargo-deb
+          cargo deb --no-build --no-strip
+          mv target/debian/filetype-cli_${{ env.VERSION }}_amd64.deb filetype-cli-${{ env.VERSION }}-amd64.deb
+
+      - name: Build AppImage
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          cargo install appimage
+          appimage --target x86_64-unknown-linux-gnu
+          mv target/release/bundle/appimage/filetype-cli-x86_64.AppImage filetype-cli-${{ env.VERSION }}.AppImage || true
+
+      - name: Build macOS pkg
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew install pkgbuild
+          cargo build --release
+          pkgbuild --identifier com.example.filetype-cli --version ${{ env.VERSION }} --root target/release filetype-cli-${{ env.VERSION }}.pkg
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: binaries-${{ matrix.os }}
+          path: |
+            filetype-cli-*.exe
+            filetype-cli-*.deb
+            filetype-cli-*.AppImage
+            filetype-cli-*.pkg
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: Release v${{ env.VERSION }}
+          files: artifacts/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

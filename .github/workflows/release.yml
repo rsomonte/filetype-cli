@@ -38,7 +38,7 @@ jobs:
         run: |
           sudo apt-get update
           cargo install cargo-deb
-          cargo deb --no-build --no-strip
+          cargo deb --no-strip
           mv target/debian/filetype-cli_${{ env.VERSION }}_amd64.deb filetype-cli-${{ env.VERSION }}-amd64.deb
 
       - name: Build AppImage

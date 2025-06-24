@@ -59,7 +59,6 @@ jobs:
           Type=Application
           Name=filetype-cli
           Exec=filetype-cli
-          Icon=app
           Terminal=true
           EOF
           ./linuxdeploy --appdir AppDir --desktop-file filetype-cli.desktop --output appimage

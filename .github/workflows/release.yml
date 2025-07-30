@@ -37,29 +37,29 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: bash
         run: |
-          mv target/release/filetype-cli.exe filetype-cli-${{ steps.version.outputs.VERSION }}-windows.exe
+          mv target/release/ufile-cli.exe ufile-cli-${{ steps.version.outputs.VERSION }}-windows.exe
       - name: Build .deb
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
           cargo install cargo-deb
           cargo deb --no-strip
-          mv target/debian/filetype-cli_${{ steps.version.outputs.VERSION }}-*_amd64.deb filetype-cli-${{ steps.version.outputs.VERSION }}-amd64.deb
+          mv target/debian/ufile-cli_${{ steps.version.outputs.VERSION }}-*_amd64.deb ufile-cli-${{ steps.version.outputs.VERSION }}-amd64.deb
       - name: Build macOS binary
         if: matrix.os == 'macos-latest'
         run: |
           cargo build --release
           mkdir -p pkg_root/usr/local/bin
-          cp target/release/filetype-cli pkg_root/usr/local/bin/
-          pkgbuild --identifier com.example.filetype-cli --version ${{ steps.version.outputs.VERSION }} --root pkg_root filetype-cli-${{ steps.version.outputs.VERSION }}.pkg
+          cp target/release/ufile-cli pkg_root/usr/local/bin/
+          pkgbuild --identifier com.example.ufile-cli --version ${{ steps.version.outputs.VERSION }} --root pkg_root ufile-cli-${{ steps.version.outputs.VERSION }}.pkg
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: binaries-${{ matrix.os }}
           path: |
-            filetype-cli-*.exe
-            filetype-cli-*.deb
-            filetype-cli-*.pkg
+            ufile-cli-*.exe
+            ufile-cli-*.deb
+            ufile-cli-*.pkg
           if-no-files-found: ignore
   release:
     needs: build

@@ -1,9 +1,9 @@
 use std::fs;
 use std::process;
 use clap::Parser;
-use filetype_core::identify_from_bytes;
+use ufile_core::identify_from_bytes;
 
-/// Simple CLI for filetype-core
+/// Simple CLI for ufile-core
 #[derive(Parser)]
 struct Cli {
     /// Path to the file to identify

@@ -1,10 +1,10 @@
-# filetype-cli: Command-Line File Type Identification
+# ufile-cli: Command-Line File Type Identification
 
-`filetype-cli` is a fast and user-friendly command-line tool for identifying file types based on their binary signatures ("magic numbers"). It is powered by [`filetype-core`](https://github.com/rsomonte/filetype-core), a high-performance Rust library inspired by the classic Unix `file` command.
+`ufile-cli` is a fast and user-friendly command-line tool for identifying file types based on their binary signatures ("magic numbers"). It is powered by [`ufile-core`](https://github.com/rsomonte/ufile-core), a high-performance Rust library inspired by the classic Unix `file` command.
 
 ## How It Works
 
-This CLI reads the first bytes of a file and uses `filetype-core` to match them against a database of known file signatures, providing a human-readable description of the detected file type.
+This CLI reads the first bytes of a file and uses `ufile-core` to match them against a database of known file signatures, providing a human-readable description of the detected file type.
 
 ## Usage
 
@@ -23,7 +23,7 @@ cargo run -- path/to/your/file
 Or, after building:
 
 ```sh
-./target/release/filetype-cli path/to/your/file
+./target/release/ufile-cli path/to/your/file
 ```
 
 Example output:
@@ -42,6 +42,6 @@ example.unknown: unknown file type
 
 - `file`: Path to the file to identify
 
-## Relationship to filetype-core
+## Relationship to ufile-core
 
-This CLI is a thin wrapper around [`filetype-core`](https://github.com/rsomonte/filetype-core), ensuring robust and consistent file type detection logic. By depending directly on the core library, `filetype-cli` always benefits from the latest improvements and signature updates.
+This CLI is a thin wrapper around [`ufile-core`](https://github.com/rsomonte/ufile-core), ensuring robust and consistent file type detection logic. By depending directly on the core library, `ufile-cli` always benefits from the latest improvements and signature updates.

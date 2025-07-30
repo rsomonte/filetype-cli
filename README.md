@@ -14,33 +14,50 @@ Build the project with Cargo:
 cargo build --release
 ```
 
-Run the CLI with a file path:
+Run the CLI with one or more file paths or directories:
 
 ```sh
+# Single file
 cargo run -- path/to/your/file
+
+# Multiple files
+cargo run -- file1.txt file2.jpg file3.pdf
+
+# Directory (processes all files in the directory)
+cargo run -- path/to/directory/
+
+# Mix of files and directories
+cargo run -- file1.txt path/to/directory/ file2.png
 ```
 
 Or, after building:
 
 ```sh
+# Single file
 ./target/release/ufile-cli path/to/your/file
+
+# Multiple files
+./target/release/ufile-cli file1.txt file2.jpg file3.pdf
+
+# Directory
+./target/release/ufile-cli path/to/directory/
+
+# Mix of files and directories
+./target/release/ufile-cli file1.txt path/to/directory/ file2.png
 ```
 
 Example output:
 
 ```
 example.png: PNG image
-```
-
-If the file type is unknown:
-
-```
-example.unknown: unknown file type
+document.pdf: PDF document
+photo.jpg: JPEG image data
+unknown.xyz: unknown file type
 ```
 
 ## Arguments
 
-- `file`: Path to the file to identify
+- `<FILES>...`: One or more paths to files or directories to identify. When a directory is provided, all files within that directory will be processed (non-recursively).
 
 ## Relationship to ufile-core
 
